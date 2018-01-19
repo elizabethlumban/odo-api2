@@ -1,4 +1,3 @@
-
 const ItemController = require('../ItemController');
 require('jest');
 
@@ -9,10 +8,9 @@ describe('getItems', () => {
         const res = { json: jest.fn() };
 
         controller.getItems({}, res);
-        expect(res.json.mock.calls).toEqual([[[
-            { id: "1", text: "Item 1" },
-            { id: "2", text: "Item 2" }
-        ]]]);
+        expect(res.json.mock.calls).toEqual([
+            [[{ id: '1', text: 'Item 1' }, { id: '2', text: 'Item 2' }]]
+        ]);
     });
 });
 
@@ -22,8 +20,6 @@ describe('addItem', () => {
         const res = { json: jest.fn() };
 
         controller.addItem(req, res);
-        expect(res.json.mock.calls).toEqual([[
-            { id: "3", text: "test" }
-        ]]);
+        expect(res.json.mock.calls).toEqual([[{ id: '3', text: 'test' }]]);
     });
 });

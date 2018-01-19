@@ -26,10 +26,10 @@ const itemController = new ItemController();
 app.get('/items', itemController.getItems.bind(itemController));
 app.post('/items', itemController.addItem.bind(itemController));
 
-app.listen(port, (err) => {
-    if(err) {
-        logger.error(err)
+app.listen(port, err => {
+    if (err) {
+        logger.error(err);
     } else {
-        logger.info(`App listening on port ${port}!`)
+        logger.info(`App listening on port ${port}!`);
     }
 });
