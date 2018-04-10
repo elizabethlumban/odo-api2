@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node .",
-    "start:dev": "node .",
+    "dev": "node .",
     "build": "babel --ignore __tests__,__mocks__ --out-dir dist src",
     "test": "npm-run-all lint test:cover",
     "test:tdd": "jest --watchAll",
@@ -26,7 +26,7 @@
     "concurrently": "^3.5.1",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "2.6.0",
     "husky": "^0.14.3",
     "jest": "^22.4.3",
     "lint-staged": "^7.0.0",
