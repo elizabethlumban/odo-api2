@@ -2,6 +2,11 @@ import { mockRequestResponse } from '../../../test/utils';
 import db from '../../utils/db';
 import * as itemController from '../items';
 
+beforeEach(() => {
+  db.insertItem = jest.fn();
+  db.insertItem.mockImplementation(() => Promise.resolve({ id: '1', text: 'Item 1' }));
+});
+
 test('getItems returns all items in the database', async () => {
   const { req, res } = mockRequestResponse();
 
@@ -10,7 +15,7 @@ test('getItems returns all items in the database', async () => {
   expect(res.json).toHaveBeenCalledTimes(1);
   const firstCall = res.json.mock.calls[0];
   const firstArg = firstCall[0];
-  const { items } = firstArg;
+  const items = firstArg;
   expect(items.length).toBeGreaterThan(0);
   const actualItems = await db.getItems();
   expect(items).toEqual(actualItems);
@@ -25,7 +30,7 @@ test('getItem returns the specific item', async () => {
   expect(res.json).toHaveBeenCalledTimes(1);
   const firstCall = res.json.mock.calls[0];
   const firstArg = firstCall[0];
-  const { item } = firstArg;
+  const item = firstArg;
 
   const itemFromDb = await db.getItem(item.id);
   expect(item).toEqual(itemFromDb);
@@ -50,4 +55,32 @@ test('it throws a required parameter error if id is missing', async () => {
   } catch (err) {
     expect(err).toEqual(Error('Required parameter "id" is missing.'));
   }
+});
+
+test('creates a new item', async () => {
+  const { res, req } = mockRequestResponse();
+  req.body = { text: 'Test Item' };
+
+  await itemController.createItem(req, res);
+
+  expect(res.json).toHaveBeenCalledTimes(1);
+  const firstCall = res.json.mock.calls[0];
+  const firstArg = firstCall[0];
+  const item = firstArg;
+
+  const itemFromDb = await db.getItem(item.id);
+  expect(item).toEqual(itemFromDb);
+});
+
+test('returns a error 500 if item cannot be created', async () => {
+  db.insertItem.mockImplementationOnce(() => Promise.resolve());
+
+  const { res, req } = mockRequestResponse();
+  req.body = { text: 'Test Item' };
+
+  await itemController.createItem(req, res);
+
+  expect(res.status).toHaveBeenCalledTimes(1);
+  expect(res.status.mock.calls[0][0]).toBe(500);
+  expect(res.send).toHaveBeenCalledTimes(1);
 });

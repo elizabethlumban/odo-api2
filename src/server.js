@@ -7,7 +7,7 @@ import configureRoutes from './routes';
 async function startServer({ port }) {
   const app = express();
 
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
 
   configureRoutes(app);
