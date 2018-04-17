@@ -14,7 +14,7 @@ const db = {
   insertItem: async item => {
     const newItem = {
       ...item,
-      id: ++db.lastId
+      id: `${++db.lastId}`
     };
     db.items.push(newItem);
     return newItem;
