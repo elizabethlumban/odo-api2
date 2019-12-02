@@ -1,6 +1,6 @@
-# Express API Starter
+# React Redux Starter Project
 
-A simple boilerplate for creating an Express JS API with Jest tests.
+This boilerplate configures and demonstrates how to create a simple Express JS API server.
 
 To start:
 
@@ -9,7 +9,7 @@ To start:
 nvm install && npm install
 
 # Runs the app in a hot-swapping mode
-npm run start:dev
+npm run start-dev
 ```
 
 To run the tests:

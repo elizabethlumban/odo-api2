@@ -1,0 +1,9 @@
+applications:
+  - name: express-starter
+memory: 128M
+buildpack: sdk-for-nodejs
+host: express-starter
+timeout: 120
+env:
+  NODE_ENV: production
+  APPLICATION_ENVIRONMENT: staging

@@ -1,0 +1,13 @@
+applications:
+  - name: express-starter
+memory: 256M
+instances: 2
+buildpack: sdk-for-nodejs
+host: express-starter
+timeout: 120
+services:
+  - LaTrobe-Major-Selector-Mongo
+env:
+  NODE_ENV: production
+  APPLICATION_ENVIRONMENT: production
+  RECOMMENDER_API: https://ltu-recommender.au-syd.mybluemix.net

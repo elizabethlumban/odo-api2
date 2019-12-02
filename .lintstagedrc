@@ -1,0 +1,3 @@
+{
+  "./src/**/*.{ts,tsx,js,jsx}": "eslint -c .eslintrc.js --max-warnings=0"
+}

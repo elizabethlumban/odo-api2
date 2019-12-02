@@ -1,84 +1,76 @@
 {
-  "name": "express-api-starter",
-  "private": true,
+  "name": "express-starter",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/app.js",
+  "license": "UNLICENSED",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node .",
-    "dev": "node .",
-    "build": "babel --ignore __tests__,__mocks__ --out-dir dist src",
-    "test": "npm-run-all lint test:cover",
-    "test:tdd": "jest --watchAll",
-    "test:cover": "jest --coverage",
-    "lint": "eslint . --cache --cache-location node_modules/.cache/eslint",
-    "verify": "concurrently --names \"lint,test:cover\" --prefix \"[{name}]\" --prefix-colors \"bgMagenta.reset.bold,bgBlue.reset.bold\" \"npm run lint --silent\" \"npm run test:cover --silent\"",
-    "precommit": "lint-staged && npm run verify --silent"
-  },
-  "author": "Michael Schimko <mschimko@au1.ibm.com>",
-  "license": "UNLICENSE",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
-    "concurrently": "^3.5.1",
-    "eslint": "^4.19.1",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "2.6.0",
-    "husky": "^0.14.3",
-    "jest": "^22.4.3",
-    "lint-staged": "^7.0.0",
-    "nodemon": "^1.17.2",
-    "npm-run-all": "^4.1.2",
-    "prettier": "^1.11.1"
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint './src/**/*.{ts,js}'",
+    "lint-fix": "eslint './src/**/*.ts' --fix",
+    "start": "node ./dist/index.js",
+    "start-dev": "NODE_ENV=development ts-node-dev src/index.ts",
+    "test": "NODE_ENV=development jest --forceExit --runInBand --detectOpenHandles",
+    "test-watch": "NODE_ENV=development jest  --runInBand"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "body-parser": "^1.18.2",
-    "cross-env": "^5.1.4",
-    "express": "^4.16.3",
-    "express-async-errors": "^2.1.2",
-    "garage-utils": "^2.1.0",
-    "lodash": "^4.17.5"
+    "@types/body-parser": "^1.17.1",
+    "@types/compression": "^1.0.1",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.2",
+    "@types/helmet": "^0.0.45",
+    "@types/jest": "^24.0.23",
+    "@types/mongoose": "^5.5.19",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
+    "helmet": "^3.21.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.3",
+    "tslib": "^1.10.0",
+    "yarn": "^1.19.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.144",
+    "@types/mongodb-memory-server": "^1.8.0",
+    "@typescript-eslint/eslint-plugin": "^2.3.3",
+    "@typescript-eslint/parser": "^2.3.3",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.9.0",
+    "jest-junit": "^8.0.0",
+    "mongodb-memory-server": "^5.2.6",
+    "prettier": "^1.14.3",
+    "prettier-eslint": "^9.0.0",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "ts-node-dev": "^1.0.0-pre.43",
+    "typescript": "^3.6.3"
   },
   "engines": {
-    "node": ">=8.9.3",
-    "npm": ">=5.5.1"
+    "node": "12.x.x"
   },
-  "lint-staged": {
-    "linters": {
-      "**/+(md|css|json)": [
-        "prettier --write",
-        "git add"
-      ],
-      "**/+(src|test)/**/*.js": [
-        "prettier --write",
-        "eslint --cache --cache-location node_modules/.cache/eslint",
-        "git add"
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules",
-    "build",
-    "dist",
-    "coverage"
-  ],
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
+  "jest": {
+    "testEnvironment": "node",
+    "testURL": "",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "roots": [
+      "src"
     ],
-    "plugins": [
-      "transform-object-rest-spread"
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
     ]
   }
 }
