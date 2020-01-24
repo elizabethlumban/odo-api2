@@ -3,6 +3,9 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.js', '!src/index.js', '!**/__tests__/**', '!**/node_modules/**'],
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/src', '<rootDir>/test'],
+  transform: {
+    '^.+\\.ts?$': 'ts-jest',
+  },
   coverageThreshold: {
     global: {
       statements: 80,
