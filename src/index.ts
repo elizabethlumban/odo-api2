@@ -1,4 +1,4 @@
-import startServer from "./server";
+import startServer from './server';
 // import connectToDb from "./mongo";
 
 // If you've got a Mongo

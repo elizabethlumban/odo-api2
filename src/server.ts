@@ -1,13 +1,13 @@
-import express from "express";
+import express from 'express';
 
-import { Express, Request, Response } from "express";
-import { isDev } from "./environment/envUtil";
-import compression from "compression";
-import helmet from "helmet";
-import cors from "cors";
-import bodyParser from "body-parser";
-import { ItemsController } from "./controllers/ItemsController";
-import { HealthController } from "./controllers/HealthController";
+import { Express, Request, Response } from 'express';
+import { isDev } from './environment/envUtil';
+import compression from 'compression';
+import helmet from 'helmet';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import { ItemsController } from './controllers/ItemsController';
+import { HealthController } from './controllers/HealthController';
 
 async function startServer() {
   const app = express();
@@ -21,14 +21,14 @@ async function startServer() {
   app.use(compression());
   app.use(helmet());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json({ limit: "50mb" }));
-  app.use(bodyParser.text({ type: "plain/text" }));
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.text({ type: 'plain/text' }));
 
   // Set Up the controllers and routes
   await setUpControllers(app);
 
   // success redirect
-  app.use("/", async (_: any, res: Response) => {
+  app.use('/', async (_: any, res: Response<any>) => {
     res.status(200).end();
   });
 
@@ -47,13 +47,13 @@ function forceHttpsMiddleware(app: Express) {
   // Add a handler to inspect the req.secure flag (see
   // http://expressjs.com/api#req.secure). This allows us
   // to know whether the request was via http or https.
-  app.enable("trust proxy");
+  app.enable('trust proxy');
   app.use((req: Request, res: Response, next: any) => {
     if (req.secure || isDev()) {
       next();
     } else {
       // request was via http, so redirect to https
-      res.redirect("https://" + req.headers.host + req.url);
+      res.redirect('https://' + req.headers.host + req.url);
     }
   });
 }

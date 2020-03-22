@@ -1,6 +1,6 @@
-import "jest";
-import { MongoMemoryServer } from "mongodb-memory-server";
-import mongoose from "mongoose";
+import 'jest';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 
 jest.setTimeout(60 * 1000);
 
@@ -9,21 +9,21 @@ jest.setTimeout(60 * 1000);
 let mongod: MongoMemoryServer | null = null;
 
 export async function startTestMongo() {
-  mongod = new MongoMemoryServer({ binary: { version: "3.6.0" } });
+  mongod = new MongoMemoryServer({ binary: { version: '3.6.0' } });
   const mongoUri = await mongod.getConnectionString();
   const mongooseOpts = {
     // options for mongoose 4.11.3 and above
     autoReconnect: true,
     reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 1000,
+    reconnectInterval: 1000
   };
 
   const resultPromise = new Promise((resolve, reject) => {
     mongoose.connect(mongoUri, mongooseOpts);
 
     // "open" or connected"
-    mongoose.connection.once("open", () => resolve());
-    mongoose.connection.on("error", e => {
+    mongoose.connection.once('open', () => resolve());
+    mongoose.connection.on('error', e => {
       console.log(`failed ${e}`);
       reject(e);
     });
@@ -46,7 +46,7 @@ export function mockRequestResponse() {
     params: {},
     body: {},
     headers: {},
-    user: {},
+    user: {}
   };
   req.header = (h: string) => req.headers[h];
 
@@ -62,7 +62,7 @@ export function mockRequestResponse() {
     json: jest.fn(),
     send: jest.fn(),
     status: jest.fn(),
-    reset: resetMock,
+    reset: resetMock
   };
 
   res.end.mockImplementation(() => res);
