@@ -8,4 +8,8 @@ ComponentSettings:
   - 8080/TCP
   Application: app
   Project: dev-eol1
-  Name: odo-react-api
+  Name: odo-api
+  Url:
+  - Name: odo-api-8080
+    Port: 8080
+    Secure: true
