@@ -14,7 +14,7 @@ async function startServer() {
 
   const port = process.env.PORT || 3001;
 
-  forceHttpsMiddleware(app);
+  //forceHttpsMiddleware(app);
 
   // Common middleware
   app.use(cors());

@@ -162,3 +162,5 @@ npm-shrinkwrap.json
 *.zip
 
 .scannerwork
+
+.odo/odo-file-index.json

@@ -7,7 +7,7 @@ export class ItemsController {
 
   public getItems = async (req: Request, res: Response, next: any) => {
     try {
-      return res.json([{ name: 'Item 1' }, { name: 'Item 2' }]);
+      return res.json([{ name: 'Item 1' }, { name: 'Item 2' }, { name: 'Item 3' }]);
     } catch (e) {
       next(e);
     }
