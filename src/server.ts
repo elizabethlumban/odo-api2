@@ -12,7 +12,7 @@ import { HealthController } from './controllers/HealthController';
 async function startServer() {
   const app = express();
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 8080;
 
   //forceHttpsMiddleware(app);
 
@@ -32,7 +32,7 @@ async function startServer() {
     res.status(200).end();
   });
 
-  app.listen(port, () => console.log(`Server is on port ${port}`));
+  app.listen(port, () => console.log(`Server is on portttt ${port}`));
 }
 
 async function setUpControllers(app: Express) {

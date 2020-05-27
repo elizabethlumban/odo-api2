@@ -1,14 +1,17 @@
 kind: LocalConfig
 apiversion: odo.openshift.io/v1alpha1
 ComponentSettings:
-  Type: nodejs
+  Type: nodejs:12-1
   SourceLocation: ./
   SourceType: local
   Ports:
   - 8080/TCP
   Application: app
-  Project: dev-eol1
+  Project: dev-eol2
   Name: odo-api
+  Envs:
+  - Name: NODE_ENV
+    Value: production
   Url:
   - Name: odo-api-8080
     Port: 8080
