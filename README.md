@@ -1,36 +1,21 @@
-# React Redux Starter Project
+This is an express backend code for https://github.com/elizabethlumban/react-starter2. This is deployed in OCP 4.3 using odo.
 
-This boilerplate configures and demonstrates how to create a simple Express JS API server.
+## Prerequisite
 
-To start:
+Use node v12.11.1.
+You can login to your OCP cluster by,
 
-```bash
-# Installs the Node version defined in .nvmrc
-nvm install && npm install
-
-# Runs the app in a hot-swapping mode
-npm run start-dev
+```
+oc login --token=g0hTBBBBUUj9v85hPNyxxxx --server=https://c1111-e.gb.containers.cloud.ibm.com:78932
 ```
 
-To run the tests:
+## Installation
 
-```bash
-npm run test
+In the project directory, run:
+
 ```
-
-## For blog
-
-```bash
-# Or yarn add --dev eslint-plugin-sonarjs
-npm install --save-dev eslint-plugin-sonarjs
-```
-
-```bash
-# Or use yarn
-npm install --save-dev sonarqube-scanner sonarqube-verify jest-sonar-reporter
-```
-
-```bash
-# Or use yarn
-npm install --save-dev audit-ci
+odo project set sampleproject
+odo create nodejs:12 odo-api
+odo url create --secure
+odo push
 ```
