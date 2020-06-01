@@ -32,7 +32,7 @@ async function startServer() {
     res.status(200).end();
   });
 
-  app.listen(port, () => console.log(`Server is on portttt ${port}`));
+  app.listen(port, () => console.log(`Server is on port ${port}`));
 }
 
 async function setUpControllers(app: Express) {

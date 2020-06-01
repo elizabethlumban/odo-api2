@@ -19,3 +19,7 @@ odo create nodejs:12 odo-api
 odo url create --secure
 odo push
 ```
+
+## dev
+export PORT=3001
+npm run start-dev
