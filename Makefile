@@ -2,7 +2,8 @@ IMAGE_NAME=backend-api
 
 #WORKER=docker-compose run --service-ports --rm worker
 CONTAINER_NAME=build_container
-WORKER=docker exec --workdir /data ${CONTAINER_NAME}
+WORKER=docker-compose -f ./MakeScripts/buildContainer.yaml run --rm worker
+# WORKER=docker run --rm -it -v /data:/data -v /var/run/docker.sock:/var/run/docker.sock  --workdir /data build_container
 SERVICE=docker-compose run --service-ports --rm app
 
 # API Connect Internal Product File Name
@@ -19,7 +20,6 @@ CF_ZIP_NAME=defaule-cf-bundle.zip
 install:
 
 	$(WORKER) make _install 
-	# If it fails due to downstream dependencies incompatible with linux, try removing yarn.lock
 	# TODO point to artifactory
 
 _install:
@@ -50,11 +50,11 @@ lint:
 _lint:
 	yarn lint
 
-# audit:
-# 	$(WORKER) make _audit
+audit:
+	$(WORKER) make _audit
 
-# _audit:
-# 	/bin/sh ./audit.sh
+_audit:
+	./MakeScripts/audit.sh
 
 bundle:
 	$(WORKER) make _bundle
@@ -81,9 +81,11 @@ _cf_bundle:
 # Builds a production container. You can change via the IMAGE_NAME var.
 # e.g. make build_container IMAGE_NAME=my-container
 build_container:
-	CONTAINER_NAME=$( shell docker ps | awk '/migratecf/{print $1}' )
-	${WORKER} ${CONTAINER_NAME} docker build . -t $(IMAGE_NAME)
+	# CONTAINER_NAME=$( shell docker ps | awk '/migratecf/{print $1}' )
+	${WORKER} make _build_container
 
+_build_container:
+	docker build . -t $(IMAGE_NAME)
 # Starts the app in a prod container. Uses env vars from .env
 start_container:
 	$(SERVICE)
@@ -102,3 +104,6 @@ clean:
 sweep:
 	docker-compose down -v --rmi all --remove-orphans
 	# docker system prune
+
+debug:
+	export CONTAINER_NAME=$( shell docker ps | awk '/build/{print $1}' )

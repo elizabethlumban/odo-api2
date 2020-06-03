@@ -12,7 +12,6 @@ let mongod: MongoMemoryServer | null = null;
 export async function startTestMongo() {
   mongod = new MongoMemoryServer({ binary: { version: '3.6.0' } });
   const mongoUri = await mongod.getConnectionString();
-  console.log(mongoUri)
   const mongooseOpts = {
     // options for mongoose 4.11.3 and above
     autoReconnect: true,
