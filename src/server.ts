@@ -1,7 +1,6 @@
 import express from 'express';
 
-import { Express, Request, Response } from 'express';
-import { isDev } from './environment/envUtil';
+import { Express, Response } from 'express';
 import compression from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -40,22 +39,6 @@ async function setUpControllers(app: Express) {
   healthController.route(app);
   const itemsController = new ItemsController();
   itemsController.route(app);
-}
-
-function forceHttpsMiddleware(app: Express) {
-  // Require HTTPS
-  // Add a handler to inspect the req.secure flag (see
-  // http://expressjs.com/api#req.secure). This allows us
-  // to know whether the request was via http or https.
-  app.enable('trust proxy');
-  app.use((req: Request, res: Response, next: any) => {
-    if (req.secure || isDev()) {
-      next();
-    } else {
-      // request was via http, so redirect to https
-      res.redirect('https://' + req.headers.host + req.url);
-    }
-  });
 }
 
 export default startServer;
