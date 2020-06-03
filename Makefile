@@ -1,7 +1,6 @@
 IMAGE_NAME=backend-api
 
 #WORKER=docker-compose run --service-ports --rm worker
-CONTAINER_NAME=build_container
 WORKER=docker-compose -f ./MakeScripts/buildContainer.yaml run --rm worker
 # WORKER=docker run --rm -it -v /data:/data -v /var/run/docker.sock:/var/run/docker.sock  --workdir /data build_container
 SERVICE=docker-compose run --service-ports --rm app
@@ -17,8 +16,7 @@ CF_ZIP_NAME=defaule-cf-bundle.zip
 # Based on: https://stackoverflow.com/questions/2145590/what-is-the-purpose-of-phony-in-a-makefile
 .PHONY: bundle install compile test lint audit clean sweep
 
-install:
-
+install: 
 	$(WORKER) make _install 
 	# TODO point to artifactory
 
@@ -97,13 +95,23 @@ debug_container:
 # Shuts down all docker-compose instances.
 # Based on https://vsupalov.com/cleaning-up-after-docker/
 clean:
-	docker-compose down --remove-orphans
+	docker-compose -f ./MakeScripts/buildContainer.yaml down --remove-orphans
 
 # Shuts down all docker-compose instances, volumes, deletes images etc.
 # This will make subsequent 3M runs significantly slower
 sweep:
-	docker-compose down -v --rmi all --remove-orphans
+	docker-compose -f ./MakeScripts/buildContainer.yaml down -v --rmi all --remove-orphans
 	# docker system prune
 
-debug:
-	export CONTAINER_NAME=$( shell docker ps | awk '/build/{print $1}' )
+
+#Some helper commands to get the name of a running container
+start_worker: 
+	@echo Starting a new worker container
+	docker-compose -f ./MakeScripts/buildContainer.yaml run --rm -d worker
+
+get_worker_name: 
+	$(eval WORKER_NAME := $(shell docker ps | awk '/build/{print $$1}' ))
+
+
+caller: get_worker_name
+	@echo container is [$(WORKER_NAME)]
