@@ -1,3 +1,3 @@
 "hooks": {
-  "pre-push": "npm build && npm test && npm run lint && npm run audit-dependencies"
+  "pre-push": "yarn build && yarn test && yarn run lint && yarn run audit-dependencies"
 }

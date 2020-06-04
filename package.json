@@ -10,8 +10,9 @@
         "lint-fix": "eslint './src/**/*.ts' --fix",
         "startold": "NODE_ENV=production  src/index.ts",
         "start": "NODE_ENV=production node ./dist/index.js",
-        "start-dev": "NODE_ENV=development ts-node-dev src/index.ts",
-        "test": "NODE_ENV=development jest --forceExit --runInBand --detectOpenHandles --coverage",
+        "dev": "NODE_ENV=development ts-node-dev src/index.ts",
+        "pretest": "env 'npm_config_strict-ssl=false' node ./node_modules/mongodb-memory-server/postinstall.js",
+        "test": "NODE_ENV=development jest --forceExit --runInBand --detectOpenHandles --coverage", 
         "test-watch": "NODE_ENV=development jest  --runInBand",
         "start-local-sonarqube": "docker-compose -f docker-compose.sonar.yml up -d",
         "stop-local-sonarqube": "docker-compose -f docker-compose.sonar.yml down"

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import 'jest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';

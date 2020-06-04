@@ -1,0 +1,85 @@
+# Default values for backend-api.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+metadata:
+  annotations:
+  labels:
+    type: backend
+
+replicaCount: 2
+
+image:
+  repository: chobday/backend-api:0.2
+  pullPolicy: Always # TODo
+imagePullSecrets: []
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+readinessProbe:
+  httpGet:
+    scheme: "HTTP"
+    path: /api/health
+    port: 3001
+  timeoutSeconds: 2
+
+containerPort: 3001
+
+service:
+  type: ClusterIP
+  port: 80
+  metadata:
+    name: backend-api
+    namespace: database
+  spec:
+    selector:
+      app: backend-api
+
+route:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+
+  # host: migration-node-example.ocp-sandbox-4312-2e9fdd63bc941193875efba99fa46e92-0000.au-syd.containers.appdomain.cloud
+  path: /
+  tls: [] #TODO
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  limits:
+    memory: 256M
+  # Can be decreased for dev on Minikube 
+  requests:
+    memory: 128M
+
+# env:
+# - name: CLOUDANT_URL
+#   value: https://6c9bc9c2-a6ab-4ea6-aea2-b290eddd7519-bluemix:77a8cf4af61accf5b71fb66ae24b60a582109937425c247729c9474b53745884@6c9bc9c2-a6ab-4ea6-aea2-b290eddd7519-bluemix.cloudantnosqldb.appdomain.cloud
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
