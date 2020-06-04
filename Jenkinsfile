@@ -11,11 +11,11 @@ pipeline {
     }
     agent { 
         docker { 
-            image 'ernesen/migratecf:3.0'
+            image 'build_worker:1.0'
         } 
     }
     stages {
-        stage('Checkout code') {
+        stage('checkout') {
             //when coding the jenkins file in a single branch project, will need to manually checkout
             when{ expression {"${manualCheckout}" == "true"}} 
             steps{
@@ -23,23 +23,60 @@ pipeline {
                 sh "ls -la"
             }
             //TODO github hook
+            // need jenkins github read account
         }
-        stage('Building image') {
-            steps{
-                echo "docker build"
-                sh "ls -la "
-                script {dockerImage = docker.build "$imageVersion"}
+        stage('install dep') {
+            steps {
+                sh 'make _install'
+                // updateCommitStatus("success", 'Dependencies download successfully.', context)
             }
         }
-        stage('Deploy image') {
-            steps{
-                echo "docker push"
-                script {
-                    docker.withRegistry( '', registryCredential ) {
-                        dockerImage.push()
-                        dockerImage.push('latest')
+        stage('check') {
+            parallel {
+                stage('audit') {
+                    steps {
+                        sh 'make _audit'
                     }
                 }
+                stage('lint') {
+                    steps {
+                        sh 'make _lint'
+                    }
+                }
+                stage('test') {
+                    steps {
+                        sh 'make _test'
+                    }
+                }
+                stage('openapi') {
+                    when{ expression {"TODO" == "true"}} 
+                    steps {
+                        sh 'make _validate_openapi'
+                    }
+                }
+            }
+        }
+        stage('compile') {
+            steps {
+                sh 'make _build'
+            }
+        }
+        stage('Building image') {
+            steps{ sh "make _build_container"}
+        }
+        stage('Deploy application') {
+            steps{
+                withCredentials([ 
+                    usernamePassword(
+                        credentialsId: 'DockerCredentials',
+                        passwordVariable: 'DOCKER_PASSWORD',
+                        usernameVariable: 'DOCKER_ID',
+                    ),
+                    string(
+                        credentialsId: 'openshift_jenkins',
+                        variable: 'OC_TOKEN',
+                    ),
+                ]) { sh "make deploy" }
             }
         }
         stage('Send Slack notifications') {
@@ -51,9 +88,6 @@ pipeline {
     post {
         failure {
             slackSend (color: '#FFC0CB', message: "FAIL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-        }
-        success {
-            echo 'success'
         }
     }
 }

@@ -1,0 +1,4 @@
+{{ .Release.Name }} Deployment Notes
+Get the application URL by running this command:
+  oc get routes --namespace={{ .Release.Namespace }} | awk '/{{ .Release.Name }}/{print $2}'
+

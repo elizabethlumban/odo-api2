@@ -77,6 +77,7 @@ build_container:
 
 _build_container:
 	docker build . -t $(IMAGE_VERSION)
+	
 # Starts the app in a prod container. Uses env vars from .env
 start_container:
 	$(SERVICE)
