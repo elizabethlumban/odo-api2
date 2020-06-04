@@ -106,7 +106,7 @@ endif
 	@docker login -u $(DOCKER_ID) --password $(DOCKER_PASSWORD)
 	@echo pushing image
 	docker push $(IMAGE_VERSION)
-	@oc login --token=$(OC_TOKEN)
+	@oc login --token=$(OC_TOKEN) --server=$(OPENSHIFT_SERVER_URI)
 	helm upgrade --install backend-api --namespace database .helm
 
 
