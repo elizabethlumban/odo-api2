@@ -23,3 +23,11 @@ odo push
 ## dev
 export PORT=3001
 npm run start-dev
+
+kubectl create rolebinding jenkins-role \
+  --clusterrole edit \
+  --serviceaccount=database:jenkins-colin \
+  --namespace database
+
+export DOCKER_ID=chobday 
+export DOCKER_PASSWORD=LYiEDQBSM8eLWd3

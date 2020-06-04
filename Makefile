@@ -1,4 +1,5 @@
-IMAGE_NAME=backend-api #Should have registry, tag
+IMAGE_VERSION=chobday/backend-api:0.2 #Should have registry, tag
+#This can be in a private registry
 
 #WORKER=docker-compose run --service-ports --rm worker
 WORKER=docker-compose -f ./.make/buildContainer.yaml run --rm worker
@@ -75,7 +76,7 @@ build_container:
 	${WORKER} make _build_container
 
 _build_container:
-	docker build . -t $(IMAGE_NAME)
+	docker build . -t $(IMAGE_VERSION)
 # Starts the app in a prod container. Uses env vars from .env
 start_container:
 	$(SERVICE)
@@ -95,6 +96,19 @@ sweep:
 	docker-compose -f ./.make/buildContainer.yaml down -v --rmi all --remove-orphans
 	# docker system prune
 
+deploy:
+ifndef DOCKER_PASSWORD
+	$(error DOCKER_ID, DOCKER_PASSWORD and/or OC_TOKEN are not defined )
+endif
+ifndef OC_TOKEN
+	$(error DOCKER_ID, DOCKER_PASSWORD and/or OC_TOKEN are not defined )
+endif
+	@docker login -u $(DOCKER_ID) --password $(DOCKER_PASSWORD)
+	@echo pushing image
+	docker push $(IMAGE_VERSION)
+	@oc login --token=$(OC_TOKEN)
+	helm upgrade --install backend-api --namespace database .helm
+
 
 #Some helper commands to get the name of a running container
 start_worker: 
@@ -103,7 +117,6 @@ start_worker:
 
 get_worker_name: 
 	$(eval WORKER_NAME := $(shell docker ps | awk '/build/{print $$1}' ))
-
-
-caller: get_worker_name
 	@echo container is [$(WORKER_NAME)]
+
+
