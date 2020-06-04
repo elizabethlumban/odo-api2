@@ -1,7 +1,7 @@
-IMAGE_NAME=backend-api
+IMAGE_NAME=backend-api #Should have registry, tag
 
 #WORKER=docker-compose run --service-ports --rm worker
-WORKER=docker-compose -f ./MakeScripts/buildContainer.yaml run --rm worker
+WORKER=docker-compose -f ./.make/buildContainer.yaml run --rm worker
 # WORKER=docker run --rm -it -v /data:/data -v /var/run/docker.sock:/var/run/docker.sock  --workdir /data build_container
 SERVICE=docker-compose run --service-ports --rm app
 
@@ -52,7 +52,7 @@ audit:
 	$(WORKER) make _audit
 
 _audit:
-	./MakeScripts/audit.sh
+	./.make/audit.sh
 
 bundle:
 	$(WORKER) make _bundle
@@ -61,20 +61,12 @@ _bundle:
 	/bin/sh ./bundle.sh
 
 validate_openapi:
-	$(WORKER) make API_INT_PRODUCT_FILE=${API_INT_PRODUCT_FILE} API_EXT_PRODUCT_FILE=${API_EXT_PRODUCT_FILE} _validate_openapi
-
-_validate_openapi:
-	# Run APIC validation only if the files exist
-	! test -f "${API_INT_PRODUCT_FILE}" || apic validate "${API_INT_PRODUCT_FILE}"
-	! test -f "${API_EXT_PRODUCT_FILE}" || apic validate "${API_EXT_PRODUCT_FILE}"
+	@echo TODO
 
 # Builds the zip for UCD. You can change via the CF_ZIP_NAME var.
 # e.g. make build_container CF_ZIP_NAME=my-file.zip
 cf_bundle:
-	$(WORKER) make CF_ZIP_NAME=${CF_ZIP_NAME} _cf_bundle
-
-_cf_bundle:
-	zip -r ${CF_ZIP_NAME} config/default.j* config/production.js dist package.json yarn.lock *.yaml defs readme.md
+	@echo Will not implement, but most Makefile will have this
 
 # Builds a production container. You can change via the IMAGE_NAME var.
 # e.g. make build_container IMAGE_NAME=my-container
@@ -95,19 +87,19 @@ debug_container:
 # Shuts down all docker-compose instances.
 # Based on https://vsupalov.com/cleaning-up-after-docker/
 clean:
-	docker-compose -f ./MakeScripts/buildContainer.yaml down --remove-orphans
+	docker-compose -f ./.make/buildContainer.yaml down --remove-orphans
 
 # Shuts down all docker-compose instances, volumes, deletes images etc.
 # This will make subsequent 3M runs significantly slower
 sweep:
-	docker-compose -f ./MakeScripts/buildContainer.yaml down -v --rmi all --remove-orphans
+	docker-compose -f ./.make/buildContainer.yaml down -v --rmi all --remove-orphans
 	# docker system prune
 
 
 #Some helper commands to get the name of a running container
 start_worker: 
 	@echo Starting a new worker container
-	docker-compose -f ./MakeScripts/buildContainer.yaml run --rm -d worker
+	docker-compose -f ./.make/buildContainer.yaml run --rm -d worker
 
 get_worker_name: 
 	$(eval WORKER_NAME := $(shell docker ps | awk '/build/{print $$1}' ))
